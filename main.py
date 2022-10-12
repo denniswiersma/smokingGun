@@ -8,12 +8,16 @@ Module description
 
 # IMPORTS #
 import sys
+from Bio import AlignIO
 
 
 # CODE #
 
 def main(args):
     """Function description"""
+    alignment = AlignIO.read(open("galectin3/msa.fasta"), "fasta")
+    for record in alignment:
+        print(record)
     return 0
 
 
