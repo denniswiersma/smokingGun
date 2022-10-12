@@ -1,0 +1,15 @@
+
+Deze opdracht heeft het volgende doel:
+- Gegeven een SNP en een gensequentie, voorspel of deze deleterious ("slecht") is of geen effect geeft. Je kunt hiervoor de lectures over Functional SNP Annotation erbij pakken, of de achterliggende papers in Achtergrond.
+- Dit omvat twee tussenstappen:
+1) het bepalen van de conservering van alle AA posities in een (voldoende) evolutionair gerelateerde familie van eiwitten van je gen van interesse.
+2) het vertalen (of voor mijn part: ophalen) van de eiwitsequentie behorende bij je gen. Let op splicing varianten!
+Voor opdracht 1 raad ik je aan een 10-20 gerelateerde eiwitsequenties te zoeken. Je zou je kunnen limiteren tot een bepaalde edit distance (bijv: geen van de eiwitten verschilt meer dat 5% van de anderen) of je kunt je limiteren tot een bepaalde phylogenetische groep (bijv. "primaten", "zoogdieren", "gewervelden"). Vergeet hier niet de NCBI TaxDB te raadplegen!
+Ik raad je aan om het clustalo programma op de linux systemen te gebruiken om de MSA te genereren, en het MSA in te lezen met behulp van de BioPython library, dan kun je er makkelijk doorheen itereren.  Via Homologene db kun je ook de sequenties krijgen die gebruikt zijn door NCBI om een alignment te maken voor je eiwit van keuze.
+Je mag zelf een conservatiecriterium bedenken: bijv. niet minder dan 90% hetzelfde AA op een positie, of allemaal dezelfde biochemische eigenschappen of... verzin het maar!
+De output van je programma zou een getal van 1-10 kunnen zijn, waarbij 10 "Zeer slecht (deleterious)" en 1 "Neutraal" betekent.
+Om te weten hoe je script gerund moet worden, moet je een Readme.txt bijvoegen met daarin uitleg over je programma en een commandline die ik kan copy-pasten. Zorg dat als er extra bestanden nodig zijn je die ook meestuurd bij het inleveren.
+
+Inleveren kan via de inlevermap op Blackboard.
+Uiterste inleverdatum is vrijdag 4 november middernacht (23:59.59).
+
