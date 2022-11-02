@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+#  Copyright (c) 2022. Dennis Wiersma.
+#  Licensed under GPLv3. See LICENSE file.
+
 """
 Module description
 """
