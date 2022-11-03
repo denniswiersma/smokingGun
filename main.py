@@ -12,6 +12,7 @@ Module description
 # IMPORTS #
 import sys
 from Bio import AlignIO
+import blosum as bl
 
 
 # CODE #
