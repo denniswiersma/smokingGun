@@ -13,7 +13,6 @@ Module description
 import sys
 import argparse
 from Bio import AlignIO
-import blosum as bl
 
 
 # CODE #
