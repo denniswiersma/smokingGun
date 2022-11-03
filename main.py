@@ -46,11 +46,25 @@ def get_arguments():
     return parser.parse_args()
 
 
+def read_msa(path_to_msa):
+    """
+    Read the MSA file using BioPython's AlignIO object.
+
+    :param path_to_msa: filepath to the file containing the MSA.
+    :return: AlignIO object containing the MSA data.
+    """
+    try:
+        with open(path_to_msa) as msa_file:
+            return AlignIO.read(msa_file, "fasta")
+    except FileNotFoundError:
+        print("Could not find file. Please try again.")
+
+
 def main(args):
     """Function description"""
-    alignment = AlignIO.read(open("galectin3/msa.fasta"), "fasta")
-    for record in alignment:
-        print(record)
+    args = get_arguments()
+
+    msa_object = read_msa(args.MSAfile)
     return 0
 
 
