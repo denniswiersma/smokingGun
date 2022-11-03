@@ -18,6 +18,11 @@ import blosum as bl
 
 # CODE #
 def argument_handler():
+    """
+    Handles interfacing with the cli using an ArgumentParser object.
+    
+    :return: parsed arguments from the cli.
+    """
     parser = argparse.ArgumentParser(prog="Smoking Gun",
                                      description="Determine SNP severity for a given MSA.")
     parser.add_argument("MSAfile",
