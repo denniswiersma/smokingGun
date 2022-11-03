@@ -26,7 +26,6 @@ def get_arguments():
     parser = argparse.ArgumentParser(prog="Smoking Gun",
                                      description="Determine SNP severity for a given MSA.")
     parser.add_argument("MSAfile",
-                        required=True,
                         type=str,
                         help="Path to the MSA.")
     parser.add_argument("-b", "--blosum",
