@@ -27,11 +27,6 @@ def get_arguments():
     parser.add_argument("MSAfile",
                         type=str,
                         help="Path to the MSA.")
-    parser.add_argument("-b", "--blosum",
-                        type=int,
-                        choices=[45, 50, 62, 80, 90],
-                        default=62,
-                        help="The blosum matrix to be selected")
     parser.add_argument("-p", "--snp",
                         required=True,
                         type=int,
