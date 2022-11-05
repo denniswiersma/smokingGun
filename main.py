@@ -11,6 +11,7 @@ Module description
 
 # IMPORTS #
 import sys
+import os
 import argparse
 from Bio import AlignIO
 
@@ -18,21 +19,26 @@ from Bio import AlignIO
 # CODE #
 class MSAHandler:
 
-    def __init__(self, path_to_msa):
-        self.path_to_msa = path_to_msa
+    def __init__(self, path_to_protein_family):
+        self.path_to_protein_family = path_to_protein_family
 
-    def read_msa(self, path_to_msa):
+    def msa_from_fasta(self):
+        try:
+            msa_file = os.system("/Users/denniswiersma/clustalo -i " + self.path_to_protein_family)
+            return msa_file
+        except ChildProcessError:
+            print("Clustalo does not function correctly. Please check your install.")
+
+    def read_msa(self):
         """
         Read the MSA file using BioPython's AlignIO object.
 
-        :param path_to_msa: filepath to the file containing the MSA.
         :return: AlignIO object containing the MSA data.
         """
         try:
-            with open(path_to_msa) as msa_file:
-                return AlignIO.read(msa_file, "fasta")
+            return AlignIO.read(self.msa_from_fasta(), "fasta")
         except FileNotFoundError:
-            print("Could not find file. Please try again.")
+            print("Could not read MSA.")
 
 
 def get_arguments():
@@ -42,10 +48,10 @@ def get_arguments():
     :return: parsed arguments from the cli.
     """
     parser = argparse.ArgumentParser(prog="Smoking Gun",
-                                     description="Determine SNP severity for a given MSA.")
-    parser.add_argument("MSAfile",
+                                     description="Determine SNP severity for a given protein family.")
+    parser.add_argument("ProteinFile",
                         type=str,
-                        help="Path to the MSA.")
+                        help="Path to the fasta file containing the protein family.")
     parser.add_argument("-p", "--snp",
                         required=True,
                         type=int,
@@ -62,7 +68,10 @@ def main(args):
     """Function description"""
     args = get_arguments()
 
-    msa_object = MSAHandler(args.MSAfile)
+    msa_object = MSAHandler(args.ProteinFile)
+    align_object = msa_object.read_msa()
+    for record in align_object:
+        print(record)
     return 0
 
 
