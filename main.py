@@ -16,6 +16,25 @@ from Bio import AlignIO
 
 
 # CODE #
+class MSAHandler:
+
+    def __init__(self, path_to_msa):
+        self.path_to_msa = path_to_msa
+
+    def read_msa(self, path_to_msa):
+        """
+        Read the MSA file using BioPython's AlignIO object.
+
+        :param path_to_msa: filepath to the file containing the MSA.
+        :return: AlignIO object containing the MSA data.
+        """
+        try:
+            with open(path_to_msa) as msa_file:
+                return AlignIO.read(msa_file, "fasta")
+        except FileNotFoundError:
+            print("Could not find file. Please try again.")
+
+
 def get_arguments():
     """
     Creates arguments and handles interfacing with the cli using an ArgumentParser object.
@@ -39,25 +58,11 @@ def get_arguments():
     return parser.parse_args()
 
 
-def read_msa(path_to_msa):
-    """
-    Read the MSA file using BioPython's AlignIO object.
-
-    :param path_to_msa: filepath to the file containing the MSA.
-    :return: AlignIO object containing the MSA data.
-    """
-    try:
-        with open(path_to_msa) as msa_file:
-            return AlignIO.read(msa_file, "fasta")
-    except FileNotFoundError:
-        print("Could not find file. Please try again.")
-
-
 def main(args):
     """Function description"""
     args = get_arguments()
 
-    msa_object = read_msa(args.MSAfile)
+    msa_object = MSAHandler(args.MSAfile)
     return 0
 
 
