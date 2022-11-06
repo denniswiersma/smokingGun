@@ -67,7 +67,13 @@ def read_dna(dna_seq_or_file):
         try:
             # Open fasta file containing DNA sequence
             with open(dna_seq_or_file) as dna_file:
-                return SeqIO.parse(dna_file, "fasta")
+                seq_record_immutable = list(SeqIO.parse(dna_file, "fasta"))[0]
+                return SeqRecord(
+                        MutableSeq(seq_record_immutable.seq),
+                        id=seq_record_immutable.id,
+                        name=seq_record_immutable.name,
+                        description=seq_record_immutable.description
+                )
         except FileNotFoundError:
             print("Could not read DNA sequence file.")
             sys.exit()
