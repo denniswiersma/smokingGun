@@ -43,6 +43,44 @@ class MSAHandler:
             print("Could not read MSA.")
 
 
+class SNPHandler:
+    def __init__(self, dna_seq_or_file):
+        self.dna_seq_or_file = dna_seq_or_file
+
+    def read_dna(self):
+        """
+        Takes either a DNA sequence directly or a fasta file and extracts it.
+
+        :return: A SecRecord object.
+        """
+
+        # Check if sequence or filename was entered
+        if (i.upper() in "ATCG" for i in self.dna_seq_or_file):
+
+            # Prompt user for said parameters
+            print("Looks like you've entered a DNA sequence. "
+                  "You can optionally provide some more data. You may leave these empty if you wish.")
+            seq_id = input("Please enter a sequence id: ")
+            seq_name = input("Please enter a sequence name: ")
+            seq_desc = input("Please enter a sequence description: ")
+
+            # Return a SeqRecord instance
+            return SeqRecord(
+                Seq(self.dna_seq_or_file),
+                id=seq_id,
+                name=seq_name,
+                description=seq_desc
+            )
+
+        else:
+            try:
+                # Open fasta file containing DNA sequence
+                with open(self.dna_seq_or_file) as dna_file:
+                    return SeqIO.parse(dna_file, "fasta")
+            except FileNotFoundError:
+                print("Could not read DNA sequence file.")
+
+
 def get_arguments():
     """
     Creates arguments and handles interfacing with the cli using an ArgumentParser object.
