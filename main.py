@@ -13,7 +13,9 @@ Module description
 import sys
 import os
 import argparse
-from Bio import AlignIO
+from Bio import SeqIO, AlignIO
+from Bio.SeqRecord import SeqRecord
+from Bio.Seq import Seq
 
 
 # CODE #
@@ -24,7 +26,7 @@ class MSAHandler:
 
     def msa_from_fasta(self):
         try:
-            msa_file = os.system("/Users/denniswiersma/clustalo -i " + self.path_to_protein_family)
+            msa_file = os.popen("/Users/denniswiersma/clustalo -i " + self.path_to_protein_family)
             return msa_file
         except ChildProcessError:
             print("Clustalo does not function correctly. Please check your install.")
