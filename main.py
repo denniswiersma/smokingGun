@@ -20,25 +20,17 @@ from Bio.Seq import MutableSeq
 
 # CODE #
 
-def msa_from_fasta(path_to_protein_family):
+def align_from_fasta(path_to_protein_family):
     """
     Use Clustalo on the command line to open a fasta file and align it.
 
-    :return: MSA data in fasta format
+    :return: MSA data in an AlignIO object.
     """
     try:
-        msa_file = os.popen("/Users/denniswiersma/clustalo -i " + path_to_protein_family)
-        return msa_file
+        msa_data = os.popen("/Users/denniswiersma/clustalo -i " + path_to_protein_family)
     except ChildProcessError:
         print("Clustalo does not function correctly. Please check your install.")
 
-
-def read_msa(msa_data):
-    """
-    Read the MSA file using BioPython's AlignIO object.
-
-    :return: AlignIO object containing the MSA data.
-    """
     try:
         return AlignIO.read(msa_data, "fasta")
     except FileNotFoundError:
@@ -51,7 +43,6 @@ def read_dna(dna_seq_or_file):
 
     :return: A SecRecord object.
     """
-
     # Check if sequence or filename was entered
     if (i.upper() in "ATCG" for i in dna_seq_or_file):
 
@@ -82,10 +73,10 @@ def read_dna(dna_seq_or_file):
 def insert_snp(protein_dna_record, snp_position, snp_letter):
     """
     Inserts an SNP into a DNA sequence extracted from a SeqRecord with MutableSeq.
-
-    :param protein_dna_record: SeqRecord object containing the DNA to insert the SNP into.
-    :param snp_position: Position at which the SNP should be placed.
-    :param snp_letter: Letter that should replace the letter already present.
+    
+    :param protein_dna_record: SeqRecord object containing the DNA to insert the SNP into
+    :param snp_position: Position at which the SNP should be placed
+    :param snp_letter: Letter that should replace the letter already present
     :return:
     """
     protein_dna = protein_dna_record.seq
@@ -137,12 +128,16 @@ def get_arguments():
 
 def main(args):
     """Function description"""
+    # Get arguments from the cli
     arguments = get_arguments()
 
-    aligned_msa = read_msa(arguments.ProteinFile)
+    # Fetch fasta data and perform msa
+    msa_data = align_from_fasta(arguments.ProteinFile)
 
+    # Fetch DNA sequence
     protein_dna = read_dna(arguments.sequence)
 
+    # Insert SNP into DNA sequence
     snp_position = int(arguments.snp[0])
     snp_letter = arguments.snp[1]
     protein_dna_snp = insert_snp(protein_dna, snp_position, snp_letter)
