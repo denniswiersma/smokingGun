@@ -30,11 +30,13 @@ def align_from_fasta(path_to_protein_family):
         msa_data = os.popen("/Users/denniswiersma/clustalo -i " + path_to_protein_family)
     except ChildProcessError:
         print("Clustalo does not function correctly. Please check your install.")
+        sys.exit()
 
     try:
         return AlignIO.read(msa_data, "fasta")
     except FileNotFoundError:
         print("Could not read MSA.")
+        sys.exit()
 
 
 def read_dna(dna_seq_or_file):
@@ -44,7 +46,7 @@ def read_dna(dna_seq_or_file):
     :return: A SecRecord object.
     """
     # Check if sequence or filename was entered
-    if (i.upper() in "ATCG" for i in dna_seq_or_file):
+    if all(i.upper() in "ATCG" for i in dna_seq_or_file):
 
         # Prompt user for said parameters
         print("Looks like you've entered a DNA sequence. "
@@ -68,12 +70,13 @@ def read_dna(dna_seq_or_file):
                 return SeqIO.parse(dna_file, "fasta")
         except FileNotFoundError:
             print("Could not read DNA sequence file.")
+            sys.exit()
 
 
 def insert_snp(protein_dna_record, snp_position, snp_letter):
     """
     Inserts an SNP into a DNA sequence extracted from a SeqRecord with MutableSeq.
-    
+
     :param protein_dna_record: SeqRecord object containing the DNA to insert the SNP into
     :param snp_position: Position at which the SNP should be placed
     :param snp_letter: Letter that should replace the letter already present
