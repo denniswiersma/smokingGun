@@ -99,8 +99,10 @@ def get_arguments():
                         help="Path to the fasta file containing the protein family.")
     parser.add_argument("-p", "--snp",
                         required=True,
-                        type=int,
-                        help="Location of the SNP in the DNA sequence.")
+                        nargs=2,
+                        help="Location of the SNP in the DNA sequence and the nucleotide to change to.\n"
+                             "Example: 6 A\n"
+                             "This would change position 6 to an A.")
     parser.add_argument("-s", "--sequence",
                         required=True,
                         type=str,
@@ -111,12 +113,14 @@ def get_arguments():
 
 def main(args):
     """Function description"""
-    args = get_arguments()
+    arguments = get_arguments()
 
-    msa_object = MSAHandler(args.ProteinFile)
-    align_object = msa_object.read_msa()
-    for record in align_object:
-        print(record)
+    msa_handler = MSAHandler(arguments.ProteinFile)
+    aligned_msa = msa_handler.read_msa()
+
+    snp_handler = SNPHandler(arguments.sequence)
+    protein_dna = snp_handler.read_dna()
+
     return 0
 
 
