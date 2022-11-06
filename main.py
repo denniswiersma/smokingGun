@@ -25,6 +25,11 @@ class MSAHandler:
         self.path_to_protein_family = path_to_protein_family
 
     def msa_from_fasta(self):
+        """
+        Use Clustalo on the command line to open a fasta file and align it.
+
+        :return: MSA data in fasta format
+        """
         try:
             msa_file = os.popen("/Users/denniswiersma/clustalo -i " + self.path_to_protein_family)
             return msa_file
