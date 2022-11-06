@@ -15,7 +15,7 @@ import os
 import argparse
 from Bio import SeqIO, AlignIO
 from Bio.SeqRecord import SeqRecord
-from Bio.Seq import Seq
+from Bio.Seq import MutableSeq
 
 
 # CODE #
@@ -71,7 +71,7 @@ class SNPHandler:
 
             # Return a SeqRecord instance
             return SeqRecord(
-                Seq(self.dna_seq_or_file),
+                MutableSeq(self.dna_seq_or_file),
                 id=seq_id,
                 name=seq_name,
                 description=seq_desc
@@ -84,6 +84,36 @@ class SNPHandler:
                     return SeqIO.parse(dna_file, "fasta")
             except FileNotFoundError:
                 print("Could not read DNA sequence file.")
+
+    def insert_snp(self, protein_dna_record, snp_position, snp_letter):
+        """
+        Inserts an SNP into a DNA sequence extracted from a SeqRecord with MutableSeq.
+
+        :param protein_dna_record: SeqRecord object containing the DNA to insert the SNP into.
+        :param snp_position: Position at which the SNP should be placed.
+        :param snp_letter: Letter that should replace the letter already present.
+        :return:
+        """
+        protein_dna = protein_dna_record.seq
+
+        if snp_position == 0:
+            protein_dna = snp_letter + protein_dna
+
+        elif snp_position <= len(protein_dna):
+            protein_dna[snp_position - 1] = snp_letter
+
+        elif snp_position > len(protein_dna):
+            protein_dna += snp_letter
+
+        else:
+            raise IndexError("Could not resolve SNP position.")
+
+        return SeqRecord(
+            MutableSeq(protein_dna),
+            id=protein_dna_record.id,
+            name=protein_dna_record.name,
+            description=protein_dna_record.description
+        )
 
 
 def get_arguments():
@@ -120,6 +150,10 @@ def main(args):
 
     snp_handler = SNPHandler(arguments.sequence)
     protein_dna = snp_handler.read_dna()
+
+    snp_position = int(arguments.snp[0])
+    snp_letter = arguments.snp[1]
+    protein_dna_snp = snp_handler.insert_snp(protein_dna, snp_position, snp_letter)
 
     return 0
 
