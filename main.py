@@ -27,7 +27,7 @@ def align_from_fasta(path_to_protein_family):
     :return: MSA data in an AlignIO object.
     """
     try:
-        msa_data = os.popen("/Users/denniswiersma/clustalo -i " + path_to_protein_family)
+        msa_data = os.popen("clustalo -i " + path_to_protein_family)
     except ChildProcessError:
         print("Clustalo does not function correctly. Please check your install.")
         sys.exit()
