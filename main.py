@@ -242,6 +242,14 @@ def calculate_score(score_dict, snp_msa, snp_position_in_protein):
             return score_dict[aa_position][aa]
 
 
+def return_output(snp_score):
+    print("Amino Acid conservation at this position is", str(round(snp_score * 100, 2)) + "%")
+    if snp_score <= 80:
+        print("This SNP looks to be deleterious.")
+    else:
+        print("This SNP does not seem to be deleterious.")
+
+
 def main(args):
     """Function description"""
     # Get arguments from the cli
@@ -267,9 +275,14 @@ def main(args):
     # Perform new msa with the snp aa sequence added to the msa
     snp_msa = align_msa_and_snp(arguments.ProteinFile, aa_sequence_snp)
 
+    # Calculate the position in the protein where the SNP is located
     snp_position_in_protein = get_snp_position_in_protein(snp_msa, snp_position)
 
-    print(calculate_score(msa_based_scoring, snp_msa, snp_position_in_protein))
+    # Calculate SNP conservation score
+    snp_score = calculate_score(msa_based_scoring, snp_msa, snp_position_in_protein)
+
+    # Return readable output to the user
+    return_output(snp_score)
 
     return 0
 
