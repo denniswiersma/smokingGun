@@ -39,6 +39,37 @@ def align_from_fasta(path_to_protein_family):
         sys.exit()
 
 
+def define_scoring(msa_data, snp_position):
+    """
+    Calculates the AA frequency at the position at which the SNP will be placed.
+    Then normalises these values by dividing by the sum of AA frequencies at that position.
+    :param msa_data: Data from the MSA as an AlignIO object
+    :param snp_position: Position at which the SNP should be placed
+    :return: A dictionary containing normalised frequency scores
+    """
+    # Initialise empty dict
+    aa_frequency = {}
+
+    # Loop through record of AlignIO object
+    for record in msa_data:
+        # Check if AA is in the dict already
+        if record.seq[snp_position] in aa_frequency:
+            # Add one to the count for that AA
+            aa_frequency[record.seq[snp_position]] += 1
+        else:
+            # Set the count for that AA to one
+            aa_frequency[record.seq[snp_position]] = 1
+
+    # Calculate how many AA were counted in the entire dictionary
+    sum_of_frequencies = sum(aa_frequency.values())
+
+    # Normalise counts by dividing every dictionary value by the sum of frequencies calculated above
+    for frequency in aa_frequency:
+        aa_frequency[frequency] = float(aa_frequency[frequency]/sum_of_frequencies)
+
+    return aa_frequency
+
+
 def read_dna(dna_seq_or_file):
     """
     Takes either a DNA sequence directly or a fasta file and extracts it.
@@ -169,7 +200,8 @@ def main(args):
     # Translate DNA with SNP to protein
     protein_sequence = translate_dna_to_aa(protein_dna_snp)
 
-    print(protein_sequence)
+    # Generate scoring based on the msa
+    msa_based_scoring = define_scoring(msa_data, snp_position)
 
     return 0
 
