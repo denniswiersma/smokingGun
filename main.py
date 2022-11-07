@@ -181,6 +181,30 @@ def get_arguments():
     return parser.parse_args()
 
 
+def align_msa_and_snp(path_to_protein_family, aa_sequence_snp):
+    """
+    Align the AA sequence containing an SNP with the protein family
+    :param path_to_protein_family: path to the protein family fasta file
+    :param aa_sequence_snp: aa sequence containing the snp
+    :return: AlignIO object containing the new alignment
+    """
+    # Get protein family
+    with open(path_to_protein_family) as protein_fasta_file:
+        protein_fasta = protein_fasta_file.readlines()
+
+    # Write protein family and aa sequence containing snp to a temporary fasta file
+    with open("tmp.fasta", "w") as protein_fasta_and_snp:
+        protein_fasta_and_snp.writelines(protein_fasta)
+        protein_fasta_and_snp.write(format(aa_sequence_snp, "fasta"))
+
+    # Align the temporary fasta file and get an AlignIO object
+    snp_alignment = align_from_fasta("tmp.fasta")
+    # Remove the temporary file
+    os.remove("tmp.fasta")
+
+    return snp_alignment
+
+
 def main(args):
     """Function description"""
     # Get arguments from the cli
@@ -202,6 +226,9 @@ def main(args):
 
     # Generate scoring based on the msa
     msa_based_scoring = define_scoring(msa_data, snp_position)
+
+    # Perform new msa with the snp aa sequence added to the msa
+    snp_msa = align_msa_and_snp(arguments.ProteinFile, aa_sequence_snp)
 
     return 0
 
