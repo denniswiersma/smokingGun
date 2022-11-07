@@ -198,7 +198,7 @@ def main(args):
     protein_dna_snp = insert_snp(protein_dna, snp_position, snp_letter)
 
     # Translate DNA with SNP to protein
-    protein_sequence_snp = translate_dna_to_aa(protein_dna_snp)
+    aa_sequence_snp = translate_dna_to_aa(protein_dna_snp)
 
     # Generate scoring based on the msa
     msa_based_scoring = define_scoring(msa_data, snp_position)
