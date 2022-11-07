@@ -39,35 +39,52 @@ def align_from_fasta(path_to_protein_family):
         sys.exit()
 
 
-def define_scoring(msa_data, snp_position):
+def define_scoring(msa_data):
     """
-    Calculates the AA frequency at the position at which the SNP will be placed.
-    Then normalises these values by dividing by the sum of AA frequencies at that position.
+    Calculates the AA frequency for every position.
+    Then normalises these values by dividing by the sum of AA frequencies at a given position.
     :param msa_data: Data from the MSA as an AlignIO object
-    :param snp_position: Position at which the SNP should be placed
-    :return: A dictionary containing normalised frequency scores
+    :return: A dictionary containing normalised frequency scores for every position
     """
-    # Initialise empty dict
-    aa_frequency = {}
-
-    # Loop through record of AlignIO object
+    # initialise empty dict
+    aa_per_position = {}
+    # Loop through every record in AlignIO object
     for record in msa_data:
-        # Check if AA is in the dict already
-        if record.seq[snp_position] in aa_frequency:
-            # Add one to the count for that AA
-            aa_frequency[record.seq[snp_position]] += 1
-        else:
-            # Set the count for that AA to one
-            aa_frequency[record.seq[snp_position]] = 1
+        # Loop through the length of each sequence. Position in sequence will be used as dictionary key
+        for i in range(len(record.seq)):
+            # Check if position is already in the dictionary
+            if i in aa_per_position:
+                # Append the list for that position with the AA at that position
+                aa_per_position[i].append(record.seq[i])
+            else:
+                # Initialise a list for that position with the AA at that position
+                aa_per_position[i] = [record.seq[i]]
 
-    # Calculate how many AA were counted in the entire dictionary
-    sum_of_frequencies = sum(aa_frequency.values())
+    # Loop through all positions in the positions dictionary
+    for position in aa_per_position:
+        # Initialise an empty dictionary. This will keep count of AA frequencies for a given position
+        aa_frequency = {}
+        # Loop through all the AA at this position
+        for aa in aa_per_position[position]:
+            # Check if AA is in the dict already
+            if aa in aa_frequency:
+                # Add one to the count for that AA
+                aa_frequency[aa] += 1
+            else:
+                # Set the count for that AA to one
+                aa_frequency[aa] = 1
 
-    # Normalise counts by dividing every dictionary value by the sum of frequencies calculated above
-    for frequency in aa_frequency:
-        aa_frequency[frequency] = float(aa_frequency[frequency]/sum_of_frequencies)
+        # Replace the lists of AAs with the frequency dictionaries
+        aa_per_position[position] = aa_frequency
 
-    return aa_frequency
+        # Calculate how many AA were counted in the entire frequency dictionary for the current position
+        sum_of_frequencies = sum(aa_frequency.values())
+
+        # Normalise counts by dividing every dictionary value by the sum of frequencies calculated above
+        for frequency in aa_frequency:
+            aa_frequency[frequency] = float(aa_frequency[frequency] / sum_of_frequencies)
+
+    return aa_per_position
 
 
 def read_dna(dna_seq_or_file):
