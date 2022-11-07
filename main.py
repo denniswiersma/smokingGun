@@ -222,6 +222,26 @@ def align_msa_and_snp(path_to_protein_family, aa_sequence_snp):
     return snp_alignment
 
 
+def get_snp_position_in_protein(snp_msa, snp_position):
+    position_without_gaps = 0
+
+    aligned_snp_sequence = list(snp_msa)[-1].seq
+
+    for position, aa in enumerate(aligned_snp_sequence):
+        if aa != "-":
+            if position_without_gaps == snp_position:
+                return position
+            position_without_gaps += 1
+
+
+def calculate_score(score_dict, snp_msa, snp_position_in_protein):
+
+    aligned_snp = list(snp_msa)[-1].seq
+    for aa_position, aa in enumerate(aligned_snp):
+        if aa_position == snp_position_in_protein:
+            return score_dict[aa_position][aa]
+
+
 def main(args):
     """Function description"""
     # Get arguments from the cli
@@ -246,6 +266,10 @@ def main(args):
 
     # Perform new msa with the snp aa sequence added to the msa
     snp_msa = align_msa_and_snp(arguments.ProteinFile, aa_sequence_snp)
+
+    snp_position_in_protein = get_snp_position_in_protein(snp_msa, snp_position)
+
+    print(calculate_score(msa_based_scoring, snp_msa, snp_position_in_protein))
 
     return 0
 
