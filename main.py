@@ -242,7 +242,7 @@ def main(args):
     aa_sequence_snp = translate_dna_to_aa(protein_dna_snp)
 
     # Generate scoring based on the msa
-    msa_based_scoring = define_scoring(msa_data, snp_position)
+    msa_based_scoring = define_scoring(msa_data)
 
     # Perform new msa with the snp aa sequence added to the msa
     snp_msa = align_msa_and_snp(arguments.ProteinFile, aa_sequence_snp)
