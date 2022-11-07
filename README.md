@@ -2,7 +2,7 @@
 The goal of this assignment is to predict whether a Single Nucleotide Polymorphism (SNP) is deleterious for a given gene sequence.
 
 # Usage
-`galectin3/homologeneFasta.fasta -p 28 G -s galectin3/galectin3_DNA.fasta`
+`python3 main.py galectin3/homologeneFasta.fasta -p 28 G -s galectin3/galectin3_DNA.fasta`
 
 # Assignment execution
 ## Finding a protein
