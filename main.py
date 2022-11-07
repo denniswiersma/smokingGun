@@ -110,6 +110,21 @@ def insert_snp(protein_dna_record, snp_position, snp_letter):
     )
 
 
+def translate_dna_to_aa(dna_record):
+    """
+    Translates dna to amino acid using SeqRecord objects
+    :param dna_record: SeqRecord object containing the DNA sequence
+    :return:
+    """
+    protein_seq = dna_record.translate()
+    return SeqRecord(
+        MutableSeq(protein_seq.seq),
+        id=dna_record.id,
+        name=dna_record.name,
+        description=dna_record.description
+    )
+
+
 def get_arguments():
     """
     Creates arguments and handles interfacing with the cli using an ArgumentParser object.
@@ -150,6 +165,11 @@ def main(args):
     snp_position = int(arguments.snp[0])
     snp_letter = arguments.snp[1]
     protein_dna_snp = insert_snp(protein_dna, snp_position, snp_letter)
+
+    # Translate DNA with SNP to protein
+    protein_sequence = translate_dna_to_aa(protein_dna_snp)
+
+    print(protein_sequence)
 
     return 0
 
