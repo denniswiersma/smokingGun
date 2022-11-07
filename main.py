@@ -4,7 +4,7 @@
 #  Licensed under GPLv3. See LICENSE file.
 
 """
-Module description
+Determine SNP severity for a given protein family when given a DNA sequence and SNP information.
 """
 
 # METADATA #
